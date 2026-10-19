@@ -1,26 +1,36 @@
 # Gedi Nadu
 
-A first-playable, Kerala-inspired Roblox town prototype built with Roblox Luau and Rojo. The environment is generated at runtime from inexpensive, anchored parts; no paid assets or external models are required.
+A procedural Kerala-inspired Roblox roleplay town prototype built with Roblox Luau and Rojo. The environment uses built-in anchored Roblox parts only; there are no paid assets or external models.
 
 ## Project layout
 
-- `default.project.json` — Rojo DataModel project mapping.
-- `src/server/GenerateTown.server.lua` — builds the roads, sidewalks, town buildings, public-service buildings, landscaping, signs, lighting, and spawn plaza when the server starts.
+- `default.project.json` — Rojo DataModel mapping. `src/server` is synced into `ServerScriptService`, including its nested ModuleScripts.
+- `src/server/GenerateTown.server.lua` — preserves the generated-folder cleanup/rebuild flow and configures the town lighting.
+- `src/server/Town/Geometry.lua` — shared part, orientation, material, and sign helpers.
+- `src/server/Town/BuildingFactory.lua` — wall openings, facade details, interior layouts, stairs, roof forms, and building variants.
+- `src/server/Town/Layout.lua` — street network, building placement, plaza, local landmarks, props, and spawn.
 
 ## Sync into Roblox Studio
 
-1. Install Rojo and its Roblox Studio plugin, and clone this repository or pull the latest branch on your Windows machine.
+1. Install Rojo and its Roblox Studio plugin. On Windows, fetch and check out the development branch:
+
+   ```powershell
+   git fetch origin
+   git switch --track origin/arena/39d64a5f-gedi-naadu
+   ```
+
+   If you already have that local branch, use `git switch arena/39d64a5f-gedi-naadu` followed by `git pull`.
 2. From the repository folder, run:
 
    ```powershell
    rojo serve default.project.json
    ```
 
-3. Open a place in Roblox Studio, open the Rojo plugin, and connect it to the local Rojo server. Sync the project; the script appears under `ServerScriptService`.
-4. Start a Play or Run session. The server script creates `Workspace.GediNaduGenerated` and places the spawn in Town Square.
+3. Open a place in Roblox Studio, connect the Rojo plugin to the local server, and sync. The bootstrap script and its nested `Town` modules appear under `ServerScriptService`.
+4. Start a Play or Run session. The server creates `Workspace.GediNaduGenerated`, including the Town Square spawn, traversable building interiors, and local destinations.
 
-The server generates the environment each time the server script runs. Re-running it removes and rebuilds only its generated folder. This repository has not been verified in Roblox Studio as part of this change.
+The server script removes and rebuilds only `Workspace.GediNaduGenerated` when it runs. This repository change has not been validated in Roblox Studio; inspect the generated map there before publishing.
 
 ## Scope
 
-This prototype covers the town environment and a basic spawn point. It does **not** yet implement the game's strict whitelist/access-control system, roleplay systems, or persistent data. Those should be added as separate server-side systems before public release.
+The town prototype includes cut wall openings, layered façades, varied roofs, balconies and verandas, simple roleplay interiors, shops, a hospital, a police station, roadside details, and a Kavu grove/bus stop. The game's strict whitelist/access-control system, roleplay mechanics, and persistent data are not implemented yet and should be added as separate server-side systems before public release.
